@@ -84,6 +84,9 @@
     "tslib": "~2.4.0",
     "typescript": "~4.6.3",
     "web-test-runner-jasmine": "~0.0.1",
-    "@types/traverse": "~0.6.33"
+    "@types/traverse": "~0.6.33",
+    "vite": "^5.2.0",
+    "vitest": "^1.6.1",
+    "@codspeed/vitest-plugin": "~4.0.1"
   }
 }
