@@ -1,0 +1,37 @@
+name: CodSpeed
+
+on:
+  push:
+    branches:
+      - 'main' # or "master"
+  pull_request: # required to have reports on PRs
+  # `workflow_dispatch` allows CodSpeed to trigger backtest
+  # performance analysis in order to generate initial data.
+  workflow_dispatch:
+
+jobs:
+  benchmarks:
+    name: Run benchmarks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: 'actions/checkout@v4'
+      - uses: 'actions/setup-node@v3'
+        with:
+          node-version: '18'
+      - name: Install Rush
+        run: npm install -g @microsoft/rush
+      - name: Install wasm-pack
+        run: |
+          rustup target add wasm32-unknown-unknown
+          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+      - name: Install project dependencies
+        run: rush install
+      - name: Build packages
+        run: rush build:release --only tag:production --only tag:tooling
+      - name: Lint packages
+        run: rush lint
+      - name: Run benchmarks
+        uses: CodSpeedHQ/action@v3
+        with:
+          run: npm exec vitest bench
+          token: ${{ secrets.CODSPEED_TOKEN }}
