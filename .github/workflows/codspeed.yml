@@ -16,6 +16,8 @@ jobs:
     steps:
       - uses: 'actions/checkout@v4'
       - uses: 'actions/setup-node@v3'
+        with:
+          node-version: '16'
       - name: Install Rush
         run: npm install -g @microsoft/rush
       - name: Install wasm-pack
